@@ -3,249 +3,454 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PayPal & Card Checkout - 10 USD</title>
+  <title>PayPal &amp; Card Checkout</title>
   <style>
+    :root {
+      --bg-top: #04153b;
+      --bg-bottom: #0b4f9c;
+      --card-bg: #ffffff;
+      --surface-soft: #f6f8fc;
+      --border-subtle: #e2e8f0;
+      --border-focus: #0070e0;
+      --text-primary: #0f172a;
+      --text-secondary: #526071;
+      --text-muted: #7c8b9e;
+      --navy: #003087;
+      --blue: #0070e0;
+      --success-bg: #ecfdf3;
+      --success-border: #abefc6;
+      --success-text: #067647;
+      --warning-bg: #fffaeb;
+      --warning-border: #fedf89;
+      --warning-text: #b54708;
+      --error-bg: #fef3f2;
+      --error-border: #fecdca;
+      --error-text: #b42318;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
+
     body {
-      background: linear-gradient(135deg, #001c64 0%, #0070e0 100%);
       min-height: 100vh;
+      background: linear-gradient(160deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       padding: 20px;
+      color: var(--text-primary);
     }
-    .card {
-      background: #ffffff;
+
+    .checkout-shell {
       width: 100%;
       max-width: 440px;
-      border-radius: 18px;
-      padding: 32px 26px;
-      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
+      background: var(--card-bg);
+      border-radius: 22px;
+      padding: 30px 26px 26px;
+      box-shadow: 0 24px 60px rgba(3, 12, 34, 0.35);
+    }
+
+    .header {
       text-align: center;
-    }
-    .badge {
-      display: inline-block;
-      background: #eef5ff;
-      color: #005ea6;
-      font-size: 12px;
-      font-weight: 700;
-      padding: 6px 14px;
-      border-radius: 50px;
-      margin-bottom: 14px;
-      letter-spacing: 0.4px;
-    }
-    h1 {
-      font-size: 23px;
-      color: #111827;
-      margin-bottom: 6px;
-    }
-    .subtitle {
-      font-size: 14px;
-      color: #6b7280;
       margin-bottom: 22px;
     }
-    .amount-box {
-      background: #f8fafc;
-      border: 2px solid #e2e8f0;
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 14px;
-      transition: border-color 0.2s;
-    }
-    .amount-box:focus-within {
-      border-color: #0070e0;
-    }
-    .amount-label {
-      display: block;
-      font-size: 12px;
-      font-weight: 600;
-      color: #64748b;
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #edf4ff;
+      color: var(--navy);
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
       text-transform: uppercase;
+      padding: 6px 13px;
+      border-radius: 999px;
+      margin-bottom: 12px;
+    }
+
+    .header h1 {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
       margin-bottom: 6px;
     }
-    .input-wrap {
+
+    .header p {
+      font-size: 13.5px;
+      line-height: 1.5;
+      color: var(--text-secondary);
+    }
+
+    .amount-panel {
+      background: var(--surface-soft);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 16px 18px;
+      margin-bottom: 14px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .amount-panel:focus-within {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 4px rgba(0, 112, 224, 0.12);
+      background: #ffffff;
+    }
+
+    .amount-top {
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
-      gap: 4px;
-    }
-    .currency {
-      font-size: 26px;
+      margin-bottom: 8px;
+      font-size: 12px;
       font-weight: 700;
-      color: #003087;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
     }
+
+    .currency-badge {
+      background: #e2e8f0;
+      color: var(--text-primary);
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+    }
+
+    .amount-field {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .symbol {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
     input[type="number"] {
-      width: 130px;
+      width: 145px;
       border: none;
       background: transparent;
-      font-size: 32px;
+      font-size: 34px;
       font-weight: 800;
-      color: #003087;
+      color: var(--navy);
       text-align: center;
       outline: none;
+      -moz-appearance: textfield;
     }
-    .presets {
-      display: flex;
-      justify-content: center;
+
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .preset-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
       gap: 8px;
       margin-bottom: 22px;
     }
+
     .preset-btn {
-      background: #f1f5f9;
-      border: 1px solid #cbd5e1;
-      color: #334155;
-      padding: 6px 14px;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .preset-btn:hover,
-    .preset-btn.active {
-      background: #003087;
-      color: #ffffff;
-      border-color: #003087;
-    }
-    #paypal-button-container {
-      margin-top: 8px;
-      min-height: 110px;
-    }
-    #status-message {
-      margin-top: 16px;
-      padding: 12px;
+      background: var(--surface-soft);
+      border: 1.5px solid var(--border-subtle);
+      color: var(--text-primary);
+      padding: 9px 6px;
       border-radius: 10px;
       font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+
+    .preset-btn:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+      background: #f3f8ff;
+    }
+
+    .preset-btn.active {
+      background: var(--navy);
+      border-color: var(--navy);
+      color: #ffffff;
+      box-shadow: 0 6px 14px rgba(0, 48, 135, 0.22);
+    }
+
+    .buttons-section {
+      min-height: 112px;
+    }
+
+    .buttons-caption {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    #status-banner {
+      margin-top: 16px;
+      padding: 13px 14px;
+      border-radius: 12px;
+      font-size: 13px;
+      line-height: 1.5;
       font-weight: 500;
       display: none;
-      line-height: 1.45;
+      word-break: break-word;
     }
-    .success {
-      background: #e6f7ed;
-      color: #137333;
-      border: 1px solid #b7e4c7;
+
+    #status-banner.success {
+      display: block;
+      background: var(--success-bg);
+      border: 1px solid var(--success-border);
+      color: var(--success-text);
     }
-    .error {
-      background: #fce8e6;
-      color: #c5221f;
-      border: 1px solid #f6aea9;
+
+    #status-banner.warning {
+      display: block;
+      background: var(--warning-bg);
+      border: 1px solid var(--warning-border);
+      color: var(--warning-text);
     }
-    .secure-footer {
-      margin-top: 18px;
+
+    #status-banner.error {
+      display: block;
+      background: var(--error-bg);
+      border: 1px solid var(--error-border);
+      color: var(--error-text);
+    }
+
+    .footer-note {
+      margin-top: 20px;
       padding-top: 14px;
-      border-top: 1px solid #f1f5f9;
+      border-top: 1px solid #eef2f6;
+      text-align: center;
       font-size: 12px;
-      color: #94a3b8;
+      color: var(--text-muted);
+      line-height: 1.5;
     }
   </style>
 </head>
 <body>
+  <main class="checkout-shell">
+    <div class="header">
+      <div class="pill">Secure Checkout</div>
+      <h1>Pay with PayPal or Card</h1>
+      <p>Choose an amount in USD and pay using PayPal or a supported debit/credit card.</p>
+    </div>
 
-  <div class="card">
-    <div class="badge">SECURE CARD &amp; PAYPAL CHECKOUT</div>
-    <h1>Complete Payment</h1>
-    <p class="subtitle">Pay with Debit/Credit Card (No PayPal Account Needed) or PayPal</p>
-
-    <div class="amount-box">
-      <label class="amount-label" for="amount">Payment Amount (USD)</label>
-      <div class="input-wrap">
-        <span class="currency">$</span>
-        <input type="number" id="amount" value="10.00" min="1" step="0.01" />
+    <div class="amount-panel">
+      <div class="amount-top">
+        <label for="amount">Payment Amount</label>
+        <span class="currency-badge">USD</span>
+      </div>
+      <div class="amount-field">
+        <span class="symbol">$</span>
+        <input
+          type="number"
+          id="amount"
+          value="10.00"
+          min="0.50"
+          step="0.01"
+          aria-label="Payment amount in USD"
+        />
       </div>
     </div>
 
-    <div class="presets">
-      <button type="button" class="preset-btn active" onclick="setAmount(10, this)">$10</button>
-      <button type="button" class="preset-btn" onclick="setAmount(25, this)">$25</button>
-      <button type="button" class="preset-btn" onclick="setAmount(50, this)">$50</button>
-      <button type="button" class="preset-btn" onclick="setAmount(100, this)">$100</button>
+    <div class="preset-row" role="group" aria-label="Preset amounts">
+      <button type="button" class="preset-btn active" data-val="10" onclick="selectPreset(10, this)">$10</button>
+      <button type="button" class="preset-btn" data-val="25" onclick="selectPreset(25, this)">$25</button>
+      <button type="button" class="preset-btn" data-val="50" onclick="selectPreset(50, this)">$50</button>
+      <button type="button" class="preset-btn" data-val="100" onclick="selectPreset(100, this)">$100</button>
     </div>
 
-    <!-- PayPal + Debit/Credit Card Buttons Render Here -->
-    <div id="paypal-button-container"></div>
-
-    <!-- Payment Status Feedback -->
-    <div id="status-message"></div>
-
-    <div class="secure-footer">
-      🔒 256-bit SSL Encrypted &bull; Visa, Mastercard &amp; PayPal Supported
+    <div class="buttons-section">
+      <div class="buttons-caption">Select a payment method below</div>
+      <div id="paypal-button-container"></div>
     </div>
-  </div>
 
-  <!-- PayPal JS SDK with Card Funding Enabled -->
+    <div id="status-banner" role="status" aria-live="polite"></div>
+
+    <div class="footer-note">
+      Encrypted connection &bull; Only <code>COMPLETED</code> captures with matching USD amount are marked paid
+    </div>
+  </main>
+
   <script src="https://www.paypal.com/sdk/js?client-id=BAApg5oTSfw-oCCk-5iuC-my-TqypRZy55RmlWYdtmU11h4TW1Antdbun5I_c1P4fGNx07IBPS5Zj6C0h0&currency=USD&intent=capture&enable-funding=card"></script>
 
   <script>
-    const statusBox = document.getElementById("status-message");
+    const amountInput = document.getElementById("amount");
+    const statusBanner = document.getElementById("status-banner");
+    const presetButtons = document.querySelectorAll(".preset-btn");
 
-    function setAmount(val, btn) {
-      document.getElementById("amount").value = Number(val).toFixed(2);
-      document.querySelectorAll(".preset-btn").forEach(b => b.classList.remove("active"));
-      if (btn) btn.classList.add("active");
+    function selectPreset(val, clickedBtn) {
+      amountInput.value = Number(val).toFixed(2);
+      presetButtons.forEach((btn) => btn.classList.remove("active"));
+      if (clickedBtn) {
+        clickedBtn.classList.add("active");
+      }
+      clearStatus();
     }
+
+    amountInput.addEventListener("input", () => {
+      const current = parseFloat(amountInput.value);
+      presetButtons.forEach((btn) => {
+        const presetVal = parseFloat(btn.dataset.val);
+        btn.classList.toggle("active", !Number.isNaN(current) && current === presetVal);
+      });
+    });
 
     function showStatus(message, type) {
-      statusBox.textContent = message;
-      statusBox.className = type;
-      statusBox.style.display = "block";
+      statusBanner.textContent = message;
+      statusBanner.className = type;
     }
 
-    paypal.Buttons({
-      style: {
-        layout: "vertical",
-        color: "gold",
-        shape: "rect",
-        label: "pay"
-      },
+    function clearStatus() {
+      statusBanner.textContent = "";
+      statusBanner.className = "";
+    }
 
-      createOrder: function (data, actions) {
-        const rawVal = parseFloat(document.getElementById("amount").value);
-        if (!rawVal || rawVal <= 0) {
-          showStatus("Please enter a valid USD amount greater than 0.", "error");
-          return actions.reject();
-        }
-        statusBox.style.display = "none";
-
-        return actions.order.create({
-          purchase_units: [
-            {
-              description: "Website Payment",
-              amount: {
-                currency_code: "USD",
-                value: rawVal.toFixed(2)
-              }
-            }
-          ]
-        });
-      },
-
-      onApprove: function (data, actions) {
-        return actions.order.capture().then(function (details) {
-          const payerName = details.payer && details.payer.name ? details.payer.name.given_name : "Customer";
-          const txnId = details.id;
-          showStatus(
-            `Payment Successful! Thank you, ${payerName}. Transaction ID: ${txnId}`,
-            "success"
-          );
-          console.log("Payment Details:", details);
-        });
-      },
-
-      onCancel: function () {
-        showStatus("Payment was cancelled.", "error");
-      },
-
-      onError: function (err) {
-        console.error("PayPal Checkout Error:", err);
-        showStatus("Payment could not be completed. Make sure this page is hosted on HTTPS and your PayPal account allows guest card checkout.", "error");
+    function getValidatedAmount() {
+      const parsed = parseFloat(amountInput.value);
+      if (Number.isNaN(parsed) || parsed <= 0) {
+        return null;
       }
-    }).render("#paypal-button-container");
-  </script>
+      return parsed.toFixed(2);
+    }
 
+    function extractCaptureSummary(details, expectedAmount) {
+      const topStatus = details && details.status ? details.status : "";
+      const purchaseUnit =
+        details && Array.isArray(details.purchase_units) && details.purchase_units[0]
+          ? details.purchase_units[0]
+          : null;
+      const captures =
+        purchaseUnit &&
+        purchaseUnit.payments &&
+        Array.isArray(purchaseUnit.payments.captures)
+          ? purchaseUnit.payments.captures
+          : [];
+
+      const primaryCapture = captures[0] || null;
+      const captureStatus =
+        primaryCapture && primaryCapture.status ? primaryCapture.status : topStatus;
+      const capturedValue =
+        primaryCapture && primaryCapture.amount && primaryCapture.amount.value
+          ? parseFloat(primaryCapture.amount.value).toFixed(2)
+          : null;
+      const capturedCurrency =
+        primaryCapture && primaryCapture.amount && primaryCapture.amount.currency_code
+          ? primaryCapture.amount.currency_code
+          : null;
+      const captureId =
+        primaryCapture && primaryCapture.id
+          ? primaryCapture.id
+          : details && details.id
+          ? details.id
+          : null;
+
+      return {
+        captureStatus,
+        capturedValue,
+        capturedCurrency,
+        captureId,
+        amountMatches: capturedValue === expectedAmount && capturedCurrency === "USD"
+      };
+    }
+
+    if (typeof paypal !== "undefined" && paypal.Buttons) {
+      paypal.Buttons({
+        style: {
+          layout: "vertical",
+          color: "gold",
+          shape: "rect",
+          label: "pay",
+          height: 44
+        },
+
+        createOrder: function (data, actions) {
+          const formattedAmount = getValidatedAmount();
+          if (!formattedAmount) {
+            showStatus("Please enter a valid USD amount greater than $0.00.", "error");
+            amountInput.focus();
+            return actions.reject();
+          }
+          clearStatus();
+
+          return actions.order.create({
+            purchase_units: [
+              {
+                description: "Online Order Payment",
+                amount: {
+                  currency_code: "USD",
+                  value: formattedAmount
+                }
+              }
+            ]
+          });
+        },
+
+        onApprove: function (data, actions) {
+          const expectedAmount = getValidatedAmount();
+
+          return actions.order.capture().then(function (details) {
+            const summary = extractCaptureSummary(details, expectedAmount);
+            const payerName =
+              details && details.payer && details.payer.name && details.payer.name.given_name
+                ? details.payer.name.given_name
+                : "Customer";
+
+            // Only treat as successful when capture status is explicitly COMPLETED
+            // and captured USD amount matches the requested checkout amount.
+            if (summary.captureStatus === "COMPLETED" && summary.amountMatches && summary.captureId) {
+              showStatus(
+                `Payment COMPLETED — Thank you, ${payerName}. Capture ID: ${summary.captureId} ($${summary.capturedValue} USD).`,
+                "success"
+              );
+            } else if (summary.captureStatus === "PENDING" || summary.captureStatus === "DECLINED") {
+              showStatus(
+                `Payment ${summary.captureStatus} — Funds were not immediately completed. Please check card balance or PayPal Activity.`,
+                "warning"
+              );
+            } else {
+              showStatus(
+                `Payment not completed (Status: ${summary.captureStatus || "UNKNOWN"}). No funds were confirmed as captured.`,
+                "error"
+              );
+            }
+
+            console.log("PayPal Capture Details:", details);
+          });
+        },
+
+        onCancel: function () {
+          showStatus("Checkout was cancelled before completion.", "error");
+        },
+
+        onError: function (err) {
+          console.error("PayPal SDK Error:", err);
+          showStatus(
+            "Payment failed or was declined. Check card balance, HTTPS hosting, and PayPal account settings.",
+            "error"
+          );
+        }
+      }).render("#paypal-button-container");
+    } else {
+      showStatus(
+        "PayPal checkout script could not load. Please check your internet connection or ad/script blocker.",
+        "error"
+      );
+    }
+  </script>
 </body>
 </html>
